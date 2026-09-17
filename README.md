@@ -25,6 +25,10 @@ The three public Access configuration values are `CF_ACCESS_ISSUER`, `CF_ACCESS_
 - Independent signing secrets transferred through stdin by `scripts/railway-secrets.py`; local recovery files live in ignored `.private/` with restrictive permissions. Never print or commit them.
 - One app replica. Paperclip and Postgres run continuously and incur usage charges; model inference is separate.
 
+## DNS and recovery
+
+The proxied CNAME `paperclip.serniaventures.com` targets `zycrfnbc.up.railway.app`. Retain the `_railway-verify.paperclip.serniaventures.com` TXT ownership record: Railway requires it even when its initial domain tool output lists only a CNAME. Wait for Railway ownership verification and certificate issuance before enabling the proxy on a new hostname. Never disable the origin token gate to troubleshoot DNS.
+
 ## Deployment and verification
 
 GitHub pushes changing Dockerfile, paperclip.json, .dockerignore, or access/** trigger Railway deployment. Review upstream changes before manually updating the image digest. Native infrastructure is recorded in `.railway/railway.ts`; remote variables use `preserve()`.
