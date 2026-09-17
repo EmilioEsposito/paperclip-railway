@@ -3,3 +3,5 @@
 .private
 scripts
 README.md
+node_modules
+**/node_modules

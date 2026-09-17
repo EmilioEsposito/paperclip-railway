@@ -21,7 +21,7 @@
   "auth": {
     "baseUrlMode": "explicit",
     "disableSignUp": true,
-    "publicBaseUrl": "https://paperclip-production-b99f.up.railway.app"
+    "publicBaseUrl": "https://paperclip.serniaventures.com"
   },
   "telemetry": {
     "enabled": false

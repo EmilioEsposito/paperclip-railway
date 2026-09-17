@@ -6,3 +6,8 @@ ENV PAPERCLIP_CONFIG=/app/pilot-config.json \
     DISABLE_TELEMETRY=1 CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 \
     PAPERCLIP_AUTH_DISABLE_SIGN_UP=true \
     PAPERCLIP_DEPLOYMENT_MODE=authenticated PAPERCLIP_DEPLOYMENT_EXPOSURE=public
+
+COPY access/package.json access/package-lock.json /app/access/
+RUN cd /app/access && npm ci --omit=dev --ignore-scripts --no-audit --no-fund
+COPY access/*.mjs /app/access/
+CMD ["node", "/app/access/start.mjs"]
