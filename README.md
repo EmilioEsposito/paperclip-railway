@@ -17,7 +17,7 @@ Uses the official self-hosted v2026.916.0 image pinned by digest, not a communit
 
 Create separate application and Postgres services, attach the data volume, set `PAPERCLIP_PUBLIC_URL`, `PORT=3100`, `HOST=0.0.0.0`, `TRUST_PROXY=uniquelocal`, and the database reference. Generate independent `BETTER_AUTH_SECRET`, `PAPERCLIP_AGENT_JWT_SECRET`, and `PAPERCLIP_TOOL_ACTION_SIGNING_SECRET`. The included provisioning script is scoped to this pilot's resource IDs.
 
-Deploy this Dockerfile with Railway CLI. `/api/health` is the deployment health check. Provision the owner through a private administrative connection; do not temporarily enable Internet signup. Preserve `/paperclip/instances/default/secrets/master.key` and signing keys through redeploys.
+Deploy this Dockerfile with Railway CLI. `.railway/railway.ts` records the imported native Railway infrastructure configuration; secrets use `preserve()`. `/api/health` is the deployment health check. Provision the owner through a private administrative connection; do not temporarily enable Internet signup. Preserve `/paperclip/instances/default/secrets/master.key` and signing keys through redeploys.
 
 ## Operations
 
