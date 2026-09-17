@@ -7,13 +7,14 @@ export default defineRailway(() => {
   const paperclipData = volume("paperclip-data", { alerts: { usage: { "100": {}, "80": {}, "95": {} } }, allowOnlineResize: true, region: "us-east4-eqdc4a", sizeMB: 50000 });
   const paperclip = service("paperclip", {
     source: github("EmilioEsposito/paperclip-railway", { checkSuites: false }),
-    build: { buildEnvironment: "V3", builder: "DOCKERFILE", dockerfilePath: "Dockerfile" },
-    healthcheck: "/api/health",
+    build: { buildEnvironment: "V3", builder: "DOCKERFILE", dockerfilePath: "Dockerfile", watchPatterns: ["/Dockerfile", "/paperclip.json", "/.dockerignore", "/access/**"] },
+    healthcheck: "/_health",
     healthcheckTimeout: 300,
     replicas: { "us-east4-eqdc4a": 1 },
     deploy: { restartPolicyMaxRetries: 5 },
+    domains: [{ domain: "paperclip.serniaventures.com", port: 3100 }],
     volumeMounts: { "/paperclip": paperclipData },
-    env: { BETTER_AUTH_SECRET: preserve(), DATABASE_URL: preserve(), DO_NOT_TRACK: preserve(), HOST: preserve(), PAPERCLIP_AGENT_JWT_SECRET: preserve(), PAPERCLIP_AUTH_DISABLE_SIGN_UP: preserve(), PAPERCLIP_PUBLIC_URL: preserve(), PAPERCLIP_TELEMETRY_DISABLED: preserve(), PAPERCLIP_TOOL_ACTION_SIGNING_SECRET: preserve(), PORT: preserve(), SENTRY_DSN: preserve(), SENTRY_DSN_BACKEND: preserve(), SENTRY_DSN_FRONTEND: preserve(), TRUST_PROXY: preserve() },
+    env: { BETTER_AUTH_SECRET: preserve(), CF_ACCESS_AUD: preserve(), CF_ACCESS_EMAIL: preserve(), CF_ACCESS_ISSUER: preserve(), DATABASE_URL: preserve(), DO_NOT_TRACK: preserve(), HOST: preserve(), PAPERCLIP_AGENT_JWT_SECRET: preserve(), PAPERCLIP_AUTH_DISABLE_SIGN_UP: preserve(), PAPERCLIP_PUBLIC_URL: preserve(), PAPERCLIP_TELEMETRY_DISABLED: preserve(), PAPERCLIP_TOOL_ACTION_SIGNING_SECRET: preserve(), PORT: preserve(), SENTRY_DSN: preserve(), SENTRY_DSN_BACKEND: preserve(), SENTRY_DSN_FRONTEND: preserve(), TRUST_PROXY: preserve() },
   });
 
   return project("paperclip", {
