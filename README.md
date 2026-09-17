@@ -26,3 +26,12 @@ This is an always-running pilot: Paperclip's scheduler touches Postgres even wit
 Daily Railway volume backups are configured for both Postgres and the app volume: database-only recovery cannot decrypt stored credentials without the master key. Backups are not verified until a restore test passes. Upgrade deliberately by reviewing upstream changes and replacing the pinned digest, then verify login, denied anonymous access, signup rejection, and telemetry opt-out.
 
 No credentials, personal MCP tokens, company data, or private monorepo code belong in this public repository.
+
+## Verified pilot state
+
+The HTTPS login page is at https://paperclip-production-b99f.up.railway.app.
+Owner login, secure session cookies, anonymous company-data rejection, and explicit signup-disabled responses were verified against the live service on September 17, 2026. Runtime configuration confirms telemetry disabled and no Sentry DSN.
+
+The upstream login page still displays a Create one link; the server rejects registration. Owner credentials are delivered separately in a protected local file and are never included here. `scripts/verify-private.py` reads that local file to repeat the access checks without printing credentials or sessions.
+
+GitHub pushes affecting Dockerfile, paperclip.json, or .dockerignore trigger deployment. Upstream releases do not auto-upgrade the pinned image. Agent runtime and MCP connections require separate configuration; none are granted personal credentials by this deployment.

@@ -6,7 +6,7 @@ def call(opener, path, data=None):
     try:
         with opener.open(req, timeout=30) as r: return r.status, json.load(r)
     except urllib.error.HTTPError as e:
-        return e.code, None
+        return e.code, json.load(e)
 anon=urllib.request.build_opener()
 status,health=call(anon,'/api/health')
 assert status==200, f'Health HTTP {status}'
@@ -14,9 +14,10 @@ print('Health: 200')
 status,_=call(anon,'/api/companies')
 assert status in (401,403), f'Anonymous data access HTTP {status}'
 print('Anonymous company access denied:', status)
-status,_=call(anon,'/api/auth/sign-up/email',{'email':'signup-probe@example.invalid','password':secrets.token_urlsafe(32),'name':'Signup probe'})
+status,rejection=call(anon,'/api/auth/sign-up/email',{'email':'signup-probe@example.com','password':secrets.token_urlsafe(32),'name':'Signup probe'})
 assert status in (400,403), f'Signup HTTP {status}'
-print('Public signup rejected:', status)
+assert rejection.get('code') == 'EMAIL_PASSWORD_SIGN_UP_DISABLED'
+print('Public signup explicitly disabled:', status)
 owner=json.loads(pathlib.Path('.private/owner.json').read_text())
 jar=http.cookiejar.CookieJar()
 session=urllib.request.build_opener(urllib.request.HTTPCookieProcessor(jar))
