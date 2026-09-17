@@ -23,6 +23,6 @@ Deploy this Dockerfile with Railway CLI. `.railway/railway.ts` records the impor
 
 This is an always-running pilot: Paperclip's scheduler touches Postgres even without an open browser. Railway compute, database memory, and volumes incur usage charges; model inference is separate. Keep one application replica and bounded agent concurrency. Review measured usage before expanding.
 
-Back up both Postgres and the app volume: database-only recovery cannot decrypt stored credentials without the master key. Backups are not verified until a restore test passes. Upgrade deliberately by reviewing upstream changes and replacing the pinned digest, then verify login, denied anonymous access, signup rejection, and telemetry opt-out.
+Daily Railway volume backups are configured for both Postgres and the app volume: database-only recovery cannot decrypt stored credentials without the master key. Backups are not verified until a restore test passes. Upgrade deliberately by reviewing upstream changes and replacing the pinned digest, then verify login, denied anonymous access, signup rejection, and telemetry opt-out.
 
 No credentials, personal MCP tokens, company data, or private monorepo code belong in this public repository.

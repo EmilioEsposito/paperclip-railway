@@ -1,4 +1,4 @@
-import { defineRailway, postgres, preserve, project, service, volume } from "railway/iac";
+import { defineRailway, github, postgres, preserve, project, service, volume } from "railway/iac";
 
 export default defineRailway(() => {
   const Postgres = postgres("Postgres", { region: "us-east4-eqdc4a" });
@@ -6,6 +6,7 @@ export default defineRailway(() => {
   const postgresVolume = volume("postgres-volume", { alerts: { usage: { "100": {}, "80": {}, "95": {} } }, allowOnlineResize: true, region: "us-east4-eqdc4a", sizeMB: 50000 });
   const paperclipData = volume("paperclip-data", { alerts: { usage: { "100": {}, "80": {}, "95": {} } }, allowOnlineResize: true, region: "us-east4-eqdc4a", sizeMB: 50000 });
   const paperclip = service("paperclip", {
+    source: github("EmilioEsposito/paperclip-railway", { checkSuites: false }),
     build: { buildEnvironment: "V3", builder: "DOCKERFILE", dockerfilePath: "Dockerfile" },
     healthcheck: "/api/health",
     healthcheckTimeout: 300,
